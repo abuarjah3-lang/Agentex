@@ -10,35 +10,43 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# التقاط اللغة المختارة لتحديد الاتجاه (RTL للعربية / LTR للإنجليزية)
-# نقوم بقراءة اللغة الافتراضية أولاً من الجلسة
 if "lang_select" not in st.session_state:
     st.session_state.lang_select = "العربية"
 
-# حقن أكواد CSS المتقدمة للتحكم في الاتجاهات (RTL / LTR) والشريط الجانبي
 is_arabic = (st.session_state.lang_select == "العربية")
 
-direction_css = f"""
+# حقن خط Tajawal وأكواد التنسيق المتقدمة (RTL/LTR والألوان ووضوح النصوص)
+custom_css = f"""
+    <import href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap">
     <style>
-    /* تحديد اتجاه الصفحة بالكامل حسب اللغة */
-    html, body, [data-testid="stAppViewContainer"] {{
+    /* تطبيق خط تاجوال على كامل التطبيق */
+    html, body, [class*="st-"] {{
+        font-family: 'Tajawal', sans-serif !important;
         direction: {"rtl" if is_arabic else "ltr"};
         text-align: {"right" if is_arabic else "left"};
     }}
     
-    /* عكس موقع الشريط الجانبي تلقائياً حسب اللغة */
+    [data-testid="stAppViewContainer"] {{
+        direction: {"rtl" if is_arabic else "ltr"};
+        background-color: #f8fafc;
+    }}
+    
+    /* تنسيق الشريط الجانبي وضمان ظهور النصوص باللون الأبيض الناصع */
     [data-testid="stSidebar"] {{
         background-color: #0f172a;
-        color: #ffffff;
         {"right: 0 !important; left: auto !important;" if is_arabic else "left: 0 !important; right: auto !important;"}
     }}
     
+    [data-testid="stSidebar"] span, 
+    [data-testid="stSidebar"] p, 
+    [data-testid="stSidebar"] label, 
+    [data-testid="stSidebar"] div,
     [data-testid="stSidebar"] .stMarkdown {{
-        color: #94a3b8;
+        color: #ffffff !important;
         text-align: {"right" if is_arabic else "left"};
     }}
     
-    /* تنسيق بطاقات خطوات العمل */
+    /* بطاقات خطوات العمل الآلي */
     .step-card {{
         background: #ffffff;
         padding: 20px;
@@ -74,24 +82,23 @@ direction_css = f"""
     }}
     </style>
 """
-st.markdown(direction_css, unsafe_allow_html=True)
+st.markdown(custom_css, unsafe_allow_html=True)
 
-# الشريط الجانبي الفاخر
+# الشريط الجانبي
 with st.sidebar:
     st.markdown("### ⚡ AGENTEX")
     st.caption("Dubai AI Agents Championship V1.0")
     st.markdown("---")
     
-    # قائمة اختيار اللغة مع تحديث الحالة
-    lang = st.selectbox("🌐 Interface Language / اللغة", ["العربية", "English"], key="lang_select")
+    lang = st.selectbox("🌐 لغة واجهة المستخدم / Interface Language", ["العربية", "English"], key="lang_select")
     
     st.markdown("---")
     if lang == "العربية":
         st.markdown("#### 🟢 حالة شبكة الوكلاء")
-        st.markdown("• **Master Agent:** `نشط`")
-        st.markdown("• **Legal Agent:** `نشط`")
-        st.markdown("• **Financial Agent:** `نشط`")
-        st.markdown("• **Operations Agent:** `نشط`")
+        st.markdown("• **المنسق الرئيسي (Master):** `نشط`")
+        st.markdown("• **الوكيل القانوني (Legal):** `نشط`")
+        st.markdown("• **الوكيل المالي (Financial):** `نشط`")
+        st.markdown("• **وكيل العمليات (Operations):** `نشط`")
         
         nav_option = st.radio(
             "🧭 نظام التنقل",
@@ -109,7 +116,7 @@ with st.sidebar:
             ["🚀 Overview", "💬 AI Workspace", "📊 Live Analytics"]
         )
 
-# محتوى التطبيق بناءً على اللغة والقسم المختار
+# محتوى التطبيق حسب اللغة
 if lang == "العربية":
     if "لوحة التشغيل" in nav_option:
         st.title("⚡ منصة Agentex الذكية لتأسيس الأعمال")
@@ -119,9 +126,10 @@ if lang == "العربية":
         st.info("💡 **انطباع اللجنة:** هذا البروتوتيب يستبدل البيروقراطية التقليدية بشبكة وكلاء ذكيين ينجزون تراخيص دبي والامتثال المالي في أقل من 4 دقائق.")
         
         st.markdown("### ⚙️ خطوات العمل الآلي (Autonomous Workflow)")
+        # في حالة العربية: نرتب الأعمدة من اليمين لليسار (01 ثم 02 ثم 03)
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.markdown('<div class="step-card"><div class="step-number">01. تحليل النوايا</div><div class="step-title">Intent Analysis</div></div>', unsafe_allow_html=True)
+            st.markdown('<div class="step-card"><div class="step-number">01. تحليل النوايا</div><div class="step-title">Intent Analysis & Scope</div></div>', unsafe_allow_html=True)
         with col2:
             st.markdown('<div class="step-card"><div class="step-number">02. تنسيق الوكلاء</div><div class="step-title">Multi-Agent Orchestration</div></div>', unsafe_allow_html=True)
         with col3:
@@ -153,10 +161,10 @@ if lang == "العربية":
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
                 steps = [
-                    "🔄 **Master Agent:** تحليل الطلب وتوزيع المهام على وكلاء Agentex...",
-                    "⚖️ **Legal Agent:** التحقق من شروط التراخيص التجارية بدبي ديجيتال...",
-                    "💰 **Financial Agent:** حساب تكاليف التأسيس واختيار البنك الرقمي...",
-                    "📄 **Operations Agent:** إعداد مسودة عقد التأسيس (MOA) ومستندات الترخيص...",
+                    "🔄 **المنسق الرئيسي (Master):** تحليل الطلب وتوزيع المهام على وكلاء Agentex...",
+                    "⚖️ **الوكيل القانوني (Legal):** التحقق من شروط التراخيص التجارية بدبي ديجيتال...",
+                    "💰 **الوكيل المالي (Financial):** حساب تكاليف التأسيس واختيار البنك الرقمي...",
+                    "📄 **وكيل العمليات (Operations):** إعداد مسودة عقد التأسيس (MOA) ومستندات الترخيص...",
                     "✨ **النتيجة النهائية:** تم تجهيز حزمة التأسيس بنجاح كامل!"
                 ]
                 for step in steps:
@@ -178,7 +186,7 @@ if lang == "العربية":
             "رقم الطلب": ["#AG-901", "#AG-902", "#AG-903", "#AG-904"],
             "المستثمر": ["شريف حمدان", "خالد المنصوري", "مارك جونسون", "إيلينا رومانوف"],
             "النشاط": ["ذكاء اصطناعي", "تجارة إلكترونية", "تقنية مالية", "استشارات رقمية"],
-            "الوكيل المسؤول": ["Legal Agent", "Financial Agent", "Operations Agent", "Master Agent"],
+            "الوكيل المسؤول": ["الوكيل القانوني", "الوكيل المالي", "وكيل العمليات", "المنسق الرئيسي"],
             "الحالة": ["مكتمل 🟢", "قيد التدقيق 🟡", "بانتظار المستندات 🟠", "مكتمل 🟢"]
         })
         st.dataframe(df, use_container_width=True)
