@@ -10,24 +10,63 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# تخصيص التصميم وتجميل الواجهة عبر CSS المتقدم
+# تخصيص التصميم والشعار الجديد عبر CSS متقدم
 st.markdown("""
     <style>
-    .main { background-color: #f4f6f9; }
-    .stButton>button { width: 100%; background: linear-gradient(135deg, #007A5E 0%, #005c47 100%); color: white; font-weight: bold; border-radius: 10px; border: none; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-    .stButton>button:hover { background: linear-gradient(135deg, #005c47 0%, #004333 100%); color: white; }
-    .metric-card { background-color: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 5px solid #007A5E; }
-    h1, h2, h3 { color: #1f2937; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .main { background-color: #f8f9fa; }
+    .stButton>button { width: 100%; background: linear-gradient(135deg, #007A5E 0%, #004d3a 100%); color: white; font-weight: bold; border-radius: 10px; border: none; padding: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    .stButton>button:hover { background: linear-gradient(135deg, #004d3a 0%, #003326 100%); color: white; }
+    
+    /* تصميم شعار احترافي مخصص */
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+    }
+    .brand-icon {
+        background: linear-gradient(135deg, #007A5E, #00F5D4);
+        color: white;
+        width: 45px;
+        height: 45px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        box-shadow: 0 4px 10px rgba(0, 122, 94, 0.3);
+    }
+    .brand-text h2 {
+        margin: 0;
+        font-size: 22px;
+        color: #1f2937;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+    .brand-text p {
+        margin: 0;
+        font-size: 11px;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# الشريط الجانبي واختيار اللغة
+# الشريط الجانبي مع الشعار الجديد
 with st.sidebar:
-    st.markdown("# ⚡ Agentex")
-    st.caption("Dubai AI Agents Championship")
-    st.markdown("---")
+    st.markdown("""
+        <div class="brand-logo">
+            <div class="brand-icon">⚡</div>
+            <div class="brand-text">
+                <h2>Agentex</h2>
+                <p>Autonomous Engine</p>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
     
-    # خيار تبديل اللغة (Language Selector)
+    st.markdown("---")
     lang = st.selectbox("🌐 Choose Language / اختر اللغة", ["العربية", "English"])
     
     st.markdown("---")
@@ -48,10 +87,17 @@ with st.sidebar:
         st.markdown("---")
         st.info("💡 Agentex: Autonomous AI platform for business setup in Dubai.")
 
-# نصوص الواجهة حسب اللغة المكتارة
+# الواجهة الرئيسية مع الشعار البصري
 if lang == "العربية":
-    st.title("⚡ منصة Agentex الذكية")
-    st.subheader("النظام المستقل لتأسيس الأعمال والامتثال في دبي")
+    st.markdown("""
+        <div class="brand-logo" style="margin-bottom: 20px;">
+            <div class="brand-icon" style="width: 55px; height: 55px; font-size: 28px;">⚡</div>
+            <div class="brand-text">
+                <h2 style="font-size: 28px;">Agentex | دبي</h2>
+                <p style="font-size: 13px;">المنصة المستقلة لتأسيس الأعمال والامتثال الذكي</p>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
     st.markdown("---")
     
     tab1, tab2 = st.tabs(["💬 مساعد Agentex الذكي", "📊 لوحة متابعة المعاملات (Live Dashboard)"])
@@ -114,8 +160,15 @@ if lang == "العربية":
         st.dataframe(df, use_container_width=True)
 
 else:
-    st.title("⚡ Agentex Platform")
-    st.subheader("Dubai Autonomous Business & Compliance Orchestrator")
+    st.markdown("""
+        <div class="brand-logo" style="margin-bottom: 20px;">
+            <div class="brand-icon" style="width: 55px; height: 55px; font-size: 28px;">⚡</div>
+            <div class="brand-text">
+                <h2 style="font-size: 28px;">Agentex Platform</h2>
+                <p style="font-size: 13px;">Dubai Autonomous Business & Compliance Orchestrator</p>
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
     st.markdown("---")
     
     tab1, tab2 = st.tabs(["💬 Agentex AI Assistant", "📊 Live Transactions Dashboard"])
