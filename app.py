@@ -15,78 +15,77 @@ if "lang_select" not in st.session_state:
 
 is_arabic = (st.session_state.lang_select == "العربية")
 
-# حقن خط Tajawal وأكواد التنسيق المتقدمة (RTL/LTR والألوان ووضوح النصوص)
+# حقن الأكواد والتنسيقات بشكل صحيح داخل وسم الأنماط <style> لمنع ظهور الكود نصياً
 custom_css = f"""
-    <import href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap">
-    <style>
-    /* تطبيق خط تاجوال على كامل التطبيق */
-    html, body, [class*="st-"] {{
-        font-family: 'Tajawal', sans-serif !important;
-        direction: {"rtl" if is_arabic else "ltr"};
-        text-align: {"right" if is_arabic else "left"};
-    }}
-    
-    [data-testid="stAppViewContainer"] {{
-        direction: {"rtl" if is_arabic else "ltr"};
-        background-color: #f8fafc;
-    }}
-    
-    /* تنسيق الشريط الجانبي وضمان ظهور النصوص باللون الأبيض الناصع */
-    [data-testid="stSidebar"] {{
-        background-color: #0f172a;
-        {"right: 0 !important; left: auto !important;" if is_arabic else "left: 0 !important; right: auto !important;"}
-    }}
-    
-    [data-testid="stSidebar"] span, 
-    [data-testid="stSidebar"] p, 
-    [data-testid="stSidebar"] label, 
-    [data-testid="stSidebar"] div,
-    [data-testid="stSidebar"] .stMarkdown {{
-        color: #ffffff !important;
-        text-align: {"right" if is_arabic else "left"};
-    }}
-    
-    /* بطاقات خطوات العمل الآلي */
-    .step-card {{
-        background: #ffffff;
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid #e2e8f0;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        text-align: center;
-        direction: {"rtl" if is_arabic else "ltr"};
-    }}
-    .step-number {{
-        font-size: 14px;
-        font-weight: 700;
-        color: #007A5E;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }}
-    .step-title {{
-        font-size: 16px;
-        font-weight: 600;
-        color: #1e293b;
-        margin-top: 5px;
-    }}
-    
-    /* الأزرار */
-    .stButton>button {{ 
-        width: 100%; 
-        background: linear-gradient(135deg, #007A5E 0%, #005c47 100%); 
-        color: white; 
-        font-weight: 600; 
-        border-radius: 8px; 
-        border: none; 
-        padding: 10px; 
-    }}
-    </style>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+
+html, body, [class*="st-"] {{
+    font-family: 'Tajawal', sans-serif !important;
+    direction: {"rtl" if is_arabic else "ltr"};
+    text-align: {"right" if is_arabic else "left"};
+}}
+
+[data-testid="stAppViewContainer"] {{
+    direction: {"rtl" if is_arabic else "ltr"};
+    background-color: #f8fafc;
+}}
+
+/* تنسيق الشريط الجانبي ونصوصه لتكون بيضاء وواضحة تماماً */
+[data-testid="stSidebar"] {{
+    background-color: #0f172a;
+    {"right: 0 !important; left: auto !important;" if is_arabic else "left: 0 !important; right: auto !important;"}
+}}
+
+[data-testid="stSidebar"] span, 
+[data-testid="stSidebar"] p, 
+[data-testid="stSidebar"] label, 
+[data-testid="stSidebar"] div,
+[data-testid="stSidebar"] .stMarkdown {{
+    color: #ffffff !important;
+    text-align: {"right" if is_arabic else "left"};
+}}
+
+/* بطاقات خطوات العمل الآلي */
+.step-card {{
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    direction: {"rtl" if is_arabic else "ltr"};
+}}
+.step-number {{
+    font-size: 14px;
+    font-weight: 700;
+    color: #007A5E;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}}
+.step-title {{
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-top: 5px;
+}}
+
+.stButton>button {{ 
+    width: 100%; 
+    background: linear-gradient(135deg, #007A5E 0%, #005c47 100%); 
+    color: white; 
+    font-weight: 600; 
+    border-radius: 8px; 
+    border: none; 
+    padding: 10px; 
+}}
+</style>
 """
 st.markdown(custom_css, unsafe_allow_html=True)
 
 # الشريط الجانبي
 with st.sidebar:
-    st.markdown("### ⚡ AGENTEX")
+    st.markdown("### ⚡ AGENTEX / أجنتكس")
     st.caption("Dubai AI Agents Championship V1.0")
     st.markdown("---")
     
@@ -119,14 +118,13 @@ with st.sidebar:
 # محتوى التطبيق حسب اللغة
 if lang == "العربية":
     if "لوحة التشغيل" in nav_option:
-        st.title("⚡ منصة Agentex الذكية لتأسيس الأعمال")
+        st.title("⚡ منصة أجنتكس (Agentex) الذكية لتأسيس الأعمال")
         st.subheader("النظام المستقل الأول المدعوم بالوكلاء المتعددين (Multi-Agent OS) لإمارة دبي")
         st.markdown("---")
         
         st.info("💡 **انطباع اللجنة:** هذا البروتوتيب يستبدل البيروقراطية التقليدية بشبكة وكلاء ذكيين ينجزون تراخيص دبي والامتثال المالي في أقل من 4 دقائق.")
         
         st.markdown("### ⚙️ خطوات العمل الآلي (Autonomous Workflow)")
-        # في حالة العربية: نرتب الأعمدة من اليمين لليسار (01 ثم 02 ثم 03)
         col1, col2, col3 = st.columns(3)
         with col1:
             st.markdown('<div class="step-card"><div class="step-number">01. تحليل النوايا</div><div class="step-title">Intent Analysis & Scope</div></div>', unsafe_allow_html=True)
@@ -143,7 +141,7 @@ if lang == "العربية":
         m4.metric("تكلفة التأسيس", "مُحسّنة تلقائياً", "أقل تكلفة")
 
     elif "غرفة العمليات" in nav_option:
-        st.title("💬 غرفة عمليات وكلاء Agentex")
+        st.title("💬 غرفة عمليات وكلاء أجنتكس (Agentex)")
         st.markdown("تفاعل مباشرة مع المنسق الرئيسي (Master Agent) لتأسيس شركتك في دبي.")
         
         if "messages_ar" not in st.session_state:
@@ -161,7 +159,7 @@ if lang == "العربية":
             with st.chat_message("assistant"):
                 message_placeholder = st.empty()
                 steps = [
-                    "🔄 **المنسق الرئيسي (Master):** تحليل الطلب وتوزيع المهام على وكلاء Agentex...",
+                    "🔄 **المنسق الرئيسي (Master):** تحليل الطلب وتوزيع المهام على وكلاء أجنتكس...",
                     "⚖️ **الوكيل القانوني (Legal):** التحقق من شروط التراخيص التجارية بدبي ديجيتال...",
                     "💰 **الوكيل المالي (Financial):** حساب تكاليف التأسيس واختيار البنك الرقمي...",
                     "📄 **وكيل العمليات (Operations):** إعداد مسودة عقد التأسيس (MOA) ومستندات الترخيص...",
@@ -172,7 +170,7 @@ if lang == "العربية":
                     time.sleep(0.5)
                 
                 final_response = """
-### 📋 تقرير تأسيس الشركة المعتمد من Agentex:
+### 📋 تقرير تأسيس الشركة المعتمد من أجنتكس (Agentex):
 1. **الكيان القانوني:** شركة ذكاء اصطناعي وبرمجيات (منطقة حرّة بدبي - DAFZA).
 2. **الرخصة:** رخصة تجارية رقمية فورية.
 3. **التكلفة الإجمالية التقديرية:** ~13,500 درهم إماراتي.
